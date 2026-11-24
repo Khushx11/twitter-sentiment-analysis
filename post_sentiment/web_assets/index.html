@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Short-post sentiment</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body><main>
+
+<p class="brand">Short-post sentiment</p><h1>Read the tone.</h1>
+<p class="lede">Explore how a text classifier scores a short post as positive, neutral or negative.</p>
+<div class="grid">
+<section class="panel"><h2>Write a post</h2><form id="predict" class="stack">
+<div class="meta"><label for="post">Post text</label><span id="count" class="muted">0 / 1,000</span></div>
+<textarea id="post" maxlength="1000" required placeholder="The update finally fixed my issue."></textarea>
+<div class="chips"><button type="button" data-text="Great service this morning!">Positive example</button>
+<button type="button" data-text="The service desk is on level two.">Neutral example</button>
+<button type="button" data-text="The new interface keeps crashing.">Negative example</button></div>
+<div class="actions"><button class="primary">Analyse sentiment</button></div><p id="status" class="status" role="status"></p></form></section>
+<section class="panel"><h2>Prediction</h2><p id="empty" class="muted">Analyse a post to compare the model’s scores.</p>
+<div id="result" hidden aria-live="polite"><p class="hero-label" id="label"></p><div id="scores"></div>
+<small>Scores are uncalibrated model outputs.</small></div></section>
+<section class="panel full"><h2 id="mode">Model session</h2><p id="session" class="muted"></p><div class="metrics" id="metrics" hidden></div></section>
+</div></main></body></html>

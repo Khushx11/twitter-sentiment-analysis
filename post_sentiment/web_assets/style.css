@@ -1,0 +1,23 @@
+
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font:16px system-ui,sans-serif}
+main{width:min(1080px,calc(100% - 36px));margin:0 auto;padding:54px 0 64px}
+h1,h2,p{margin:0}h1{font-size:clamp(2.6rem,7vw,5.5rem);letter-spacing:-.075em;line-height:1}
+h2{font-size:1.35rem;letter-spacing:-.035em}.lede{margin:15px 0 30px;max-width:54ch;line-height:1.6}
+.brand{font-weight:750;letter-spacing:.1em;text-transform:uppercase;font-size:.76rem;margin-bottom:24px}
+.grid{display:grid;gap:18px;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+.panel{padding:22px;border:1px solid var(--line);border-radius:22px;background:var(--panel);min-width:0}
+.panel h2{margin-bottom:15px}.stack{display:grid;gap:11px}
+.actions,.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,.button{cursor:pointer;border:1px solid var(--line);padding:10px 14px;border-radius:12px;background:transparent;color:inherit;font:inherit;font-weight:650;text-decoration:none}
+button.primary{background:var(--accent);color:var(--onaccent);border-color:transparent}button:disabled{opacity:.5;cursor:default}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+textarea,input[type=search]{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px;background:var(--field);color:inherit;font:inherit}
+textarea{resize:vertical;min-height:148px}.muted,small{color:var(--muted);line-height:1.5}.status{min-height:1.5em;color:var(--muted)}.error{color:var(--error)}
+[hidden]{display:none!important}.full{grid-column:1/-1}.metric{padding:12px;border-radius:13px;background:var(--field)}.metric strong{display:block;font-size:1.55rem}
+@media(max-width:720px){main{padding-top:35px}.grid{grid-template-columns:1fr}.panel{padding:17px}}
+
+:root{--line:#3e3d56;--panel:#242334;--field:#1b1a29;--accent:#d6bbff;--onaccent:#24143e;--muted:#c3bed8;--error:#ffaca4}
+body{color:#f5f0ff;background:radial-gradient(ellipse at top right,#452e65,transparent 50%),#181724}
+.brand{color:var(--accent)}.chips button{font-size:.83rem}.hero-label{font-size:clamp(2rem,5vw,3.7rem);font-weight:750;text-transform:capitalize;letter-spacing:-.06em}
+.score{display:grid;grid-template-columns:72px 1fr 56px;align-items:center;gap:10px;margin:14px 0;font-size:.9rem}
+progress{width:100%;accent-color:var(--accent)}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px}.meta{display:flex;justify-content:space-between;gap:8px}

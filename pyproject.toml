@@ -14,3 +14,6 @@ post-sentiment = "post_sentiment.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["post_sentiment*"]
+
+[tool.setuptools.package-data]
+post_sentiment = ["web_assets/*"]
