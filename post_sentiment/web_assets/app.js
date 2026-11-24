@@ -1,6 +1,14 @@
 
 const $ = id => document.getElementById(id);
-const updateCount = () => { $('count').textContent = $('post').value.length + ' / 1,000'; };
+let inputVersion = 0;
+function updateCount() {
+  inputVersion += 1;
+  $('count').textContent = $('post').value.length + ' / 1,000';
+  $('result').hidden = true;
+  $('empty').hidden = false;
+  $('status').textContent = '';
+  $('status').classList.remove('error');
+}
 $('post').addEventListener('input', updateCount);
 document.querySelectorAll('[data-text]').forEach(button => button.addEventListener('click', () => {
   $('post').value = button.dataset.text;
@@ -15,6 +23,7 @@ function label(tag, text) {
 $('predict').addEventListener('submit', async event => {
   event.preventDefault();
   const button = event.submitter;
+  const version = inputVersion;
   if (button) button.disabled = true;
   $('status').textContent = 'Analysing…';
   $('status').classList.remove('error');
@@ -23,6 +32,7 @@ $('predict').addEventListener('submit', async event => {
   try {
     const response = await fetch('/api/predict', {method:'POST', body:$('post').value});
     const value = await response.json();
+    if (version !== inputVersion) return;
     if (!response.ok) throw new Error(value.error);
     $('label').textContent = value.label;
     $('scores').replaceChildren(...Object.entries(value.model_scores).map(([name, score]) => {
@@ -38,6 +48,7 @@ $('predict').addEventListener('submit', async event => {
     $('result').hidden = false;
     $('status').textContent = 'Analysis complete.';
   } catch (error) {
+    if (version !== inputVersion) return;
     $('status').textContent = error.message;
     $('status').classList.add('error');
     $('empty').hidden = false;
@@ -53,6 +64,13 @@ function showMetrics(values) {
     return card;
   }));
   $('metrics').hidden = false;
+}
+function showProtocol(entries) {
+  $('protocol').replaceChildren(...entries.map(([name, value]) => {
+    const row = label('div', '');
+    row.append(label('dt', name), label('dd', value));
+    return row;
+  }));
 }
 function drawMatrix(report) {
   const names = report.class_order;
@@ -70,9 +88,16 @@ function drawMatrix(report) {
     const row = label('tr', '');
     const title = label('th', name);
     title.scope = 'row';
-    row.append(title, ...result.confusion_matrix[index].map(count => label('td', count)),
-      label('td', (100 * result.class_metrics[name].recall).toFixed(1) + '%'),
-      label('td', result.class_metrics[name].support));
+    const support = result.class_metrics[name].support;
+    const cells = result.confusion_matrix[index].map(count => {
+      const cell = label('td', count.toLocaleString());
+      const share = support ? count / support : 0;
+      cell.className = 'heat level-' + Math.round(5 * share);
+      cell.title = (share * 100).toFixed(1) + '% of actual ' + name + ' tweets';
+      return cell;
+    });
+    row.append(title, ...cells, label('td', (100 * result.class_metrics[name].recall).toFixed(1) + '%'),
+      label('td', support.toLocaleString()));
     body.append(row);
   });
   $('matrix').replaceChildren(head, body);
@@ -97,6 +122,14 @@ async function loadSession() {
         ['Test macro-F1', result.logistic_regression.macro_f1],
       ]);
       drawMatrix(result);
+      showProtocol([
+        ['Training tweets', result.split_sizes.train.toLocaleString()],
+        ['Validation tweets', result.split_sizes.val.toLocaleString()],
+        ['Test tweets', test],
+        ['Features', 'Word + character TF-IDF'],
+        ['Estimator', 'Logistic regression'],
+        ['Regularisation C', result.selected_C],
+      ]);
     } else if (result) {
       $('session').textContent = 'Held-out results from the dataset used to train this local model.';
       showMetrics([
@@ -105,6 +138,12 @@ async function loadSession() {
         ['Test accuracy', result.logistic_regression.accuracy],
       ]);
       drawMatrix(result);
+      showProtocol([
+        ['Training examples', Object.values(result.train_counts).reduce((sum, n) => sum + n, 0)],
+        ['Test examples', Object.values(result.test_counts).reduce((sum, n) => sum + n, 0)],
+        ['Features', 'Word + character TF-IDF'],
+        ['Estimator', 'Logistic regression'],
+      ]);
     } else if (value.held_out) {
       $('session').textContent = 'Synthetic smoke test on eight posts. Load the TweetEval model to see the benchmark evaluation.';
     } else {

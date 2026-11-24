@@ -1,25 +1,27 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Short-post Sentiment | Model evaluation</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
-</head><body><header><div class="top"><div class="brand"><span class="mark" aria-hidden="true">SS</span>Short-post Sentiment</div><span>Local inference</span></div></header>
-<main><div class="hero"><div><h1>Sentiment analysis</h1><p class="lede">Run three-class inference and inspect how the model performed on held-out data.</p></div></div>
-
-<div class="grid">
-<section class="panel"><h2>Inference input</h2><form id="predict" class="stack">
-<div class="meta"><label for="post">English post</label><small id="count">0 / 1,000</small></div>
-<textarea id="post" maxlength="1000" required placeholder="Enter a short post to classify"></textarea>
-<div class="chips"><button type="button" data-text="The rollout went smoothly and the support team was excellent.">Positive</button>
+<title>Twitter Sentiment Analysis</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head><body>
+<header><div class="nav"><a href="/" class="brand"><span class="mark" aria-hidden="true">∿</span> Twitter Sentiment Analysis</a><nav aria-label="Sections"><a href="#inference">Inference</a><a href="#evaluation">Evaluation</a></nav></div></header>
+<main>
+<div class="hero"><div><p class="eyebrow">NLP / TEXT CLASSIFICATION</p><h1>Twitter Sentiment Analysis</h1><p>Classify English tweets and inspect the model’s performance on the official TweetEval test split.</p></div><span class="tag" id="mode">Loading model</span></div>
+<div class="grid" id="inference">
+<section class="panel"><h2>Live inference</h2><form id="predict" class="stack">
+<div class="meta"><label for="post">Tweet text</label><small id="count">0 / 1,000</small></div>
+<textarea id="post" maxlength="1000" required placeholder="Paste an English tweet"></textarea>
+<div class="chips"><span>Examples</span><button type="button" data-text="The rollout went smoothly and the support team was excellent.">Positive</button>
 <button type="button" data-text="The release is scheduled for 9 am tomorrow.">Neutral</button>
 <button type="button" data-text="The new update keeps crashing and support has not replied.">Negative</button></div>
-<div class="actions"><button class="primary">Run inference</button></div><p id="status" class="status" role="status"></p></form></section>
-<section class="panel"><div class="panel-heading"><h2>Model output</h2><span class="tag" id="mode">Loading model</span></div>
-<p id="empty" class="muted">Run inference to see the predicted class and score distribution.</p>
-<div id="result" hidden aria-live="polite"><p class="hero-label" id="label"></p><div id="scores"></div>
-<small>Scores express the model’s relative preference. They are uncalibrated.</small></div></section>
-<section class="panel full"><div class="panel-heading"><h2>Evaluation</h2><a id="dataset-link" class="button" hidden>Dataset and splits</a></div>
-<div class="stack"><p id="session" class="muted"></p><div class="metrics" id="metrics" hidden></div>
-<details id="diagnostics" hidden><summary>Confusion matrix and per-class recall</summary>
-<p class="muted">Rows show actual labels. Columns show predictions.</p><div class="scroll"><table id="matrix"></table></div></details>
-</div></section>
+<div class="actions"><button class="primary">Analyse tweet</button><p id="status" class="status" role="status"></p></div></form></section>
+<section class="panel output"><h2>Prediction</h2><p id="empty" class="muted">Submit a tweet to compare the model’s scores across all three labels.</p>
+<div id="result" hidden aria-live="polite"><div class="prediction"><span class="muted">Predicted sentiment</span><p class="hero-label" id="label"></p></div><div id="scores"></div>
+<p class="foot">Model scores are uncalibrated.</p></div></section>
 </div>
+<section id="evaluation" class="evaluation">
+<div class="section-head"><div><p class="eyebrow">BENCHMARK</p><h2>Model evaluation</h2></div><a id="dataset-link" class="button" hidden>View TweetEval ↗</a></div>
+<p id="session" class="muted"></p><div class="metrics" id="metrics" hidden></div>
+<div id="diagnostics" class="diagnostics" hidden>
+<div><h3>Confusion matrix</h3><p class="foot">Rows are actual classes. Shading shows the share within each row.</p><div class="scroll"><table id="matrix"></table></div></div>
+<div class="protocol"><h3>Evaluation protocol</h3><dl id="protocol"></dl></div>
+</div></section>
 </main></body></html>

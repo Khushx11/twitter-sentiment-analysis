@@ -1,6 +1,6 @@
-# Short-post sentiment analysis
+# Twitter Sentiment Analysis
 
-A reproducible Python experiment for classifying short posts as negative, neutral or positive. It compares a TF-IDF logistic regression model against a majority-class baseline on the same held-out split.
+A reproducible Python experiment for classifying English tweets as negative, neutral or positive. It compares a TF-IDF logistic regression model against a majority-class baseline on the same held-out split.
 
 ## Interview demo and measured benchmark
 
