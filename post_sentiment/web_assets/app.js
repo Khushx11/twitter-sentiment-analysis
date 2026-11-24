@@ -127,6 +127,10 @@ async function loadSession() {
         ['Training tweets', result.split_sizes.train.toLocaleString()],
         ['Validation tweets', result.split_sizes.val.toLocaleString()],
         ['Test tweets', test],
+        ...(result.test_vocabulary_coverage ? [[
+          'Test tweets declined by the vocabulary check',
+          result.test_vocabulary_coverage.without_features.toLocaleString(),
+        ]] : []),
         ['Features', 'Word + character TF-IDF'],
         ['Estimator', 'Logistic regression'],
         ['Logistic regression C', result.selected_C],

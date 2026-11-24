@@ -9,6 +9,7 @@ from sklearn.metrics import recall_score
 from sklearn.svm import LinearSVC
 
 from .artefacts import save
+from .inference import has_model_features
 from .labels import LABELS
 from .metrics import score
 from .models import classifier_pipeline
@@ -71,6 +72,10 @@ def benchmark(directory, output):
     svm = LinearSVC(class_weight="balanced", max_iter=10000, random_state=42)
     svm_c, svm_trials = select(svm, transformed, train_y, validation, val_y)
 
+    test_features = features.transform(test_x)
+    test_predictions = estimator.predict(test_features)
+    no_features = int((~has_model_features(test_features)).sum())
+
     baseline = DummyClassifier(strategy="most_frequent").fit(np.zeros((len(train_y), 1)), train_y)
     train_unique = set(train_x)
     overlap = {split: sum(text in train_unique for text in data[split][0]) for split in ("val", "test")}
@@ -85,8 +90,12 @@ def benchmark(directory, output):
         "selected_C": selected_c,
         "svm_validation_trials": svm_trials,
         "svm_selected_C": svm_c,
-        "logistic_regression": score(test_y, model.predict(test_x)),
-        "linear_svm": score(test_y, svm.predict(features.transform(test_x))),
+        "logistic_regression": score(test_y, test_predictions),
+        "test_vocabulary_coverage": {
+            "with_features": len(test_y) - no_features,
+            "without_features": no_features,
+        },
+        "linear_svm": score(test_y, svm.predict(test_features)),
         "majority_baseline": score(test_y, baseline.predict(np.zeros((len(test_y), 1)))),
     }
     for name in ("logistic_regression", "linear_svm", "majority_baseline"):
