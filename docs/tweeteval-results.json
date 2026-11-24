@@ -1,0 +1,125 @@
+{
+  "dataset": "TweetEval sentiment",
+  "source": "https://github.com/cardiffnlp/tweeteval/tree/4fbd22cd78421f05b1ecdb4fc5725bc7a7bd8f66/datasets/sentiment",
+  "split_sizes": {
+    "train": 45615,
+    "val": 2000,
+    "test": 12284
+  },
+  "class_order": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "overlap_with_train": {
+    "val": 0,
+    "test": 0
+  },
+  "input_sha256": {
+    "train_text.txt": "368f01052ea6fd8ffc408a2a2e6ac9669e31542581a0396ef16591ea26eb98a6",
+    "train_labels.txt": "122bfb1732fb6995b0e5c5f726c0ba457c469c3b6e60513007ce5037f23e65d4",
+    "val_text.txt": "e5b021e6fc45064c260b09814b803d8f56cada519c4d952d72f43d48a350a964",
+    "val_labels.txt": "b4566926c72e2e4e2916c864def94e76c4cdde52446af2c7ba4fc2006e057e51",
+    "test_text.txt": "09a93a55c63fd93f97485ef7302889d7edb4091cd49733aa37da094f0bfa0675",
+    "test_labels.txt": "6afb4afe9374d1f983bcf9a7c79b108d0f37fdf020a83f30488309bed215db9d"
+  },
+  "validation_trials": [
+    {
+      "C": 0.3,
+      "macro_recall": 0.6821154115457913
+    },
+    {
+      "C": 1.0,
+      "macro_recall": 0.6884134384134385
+    },
+    {
+      "C": 3.0,
+      "macro_recall": 0.6846616229527621
+    }
+  ],
+  "selected_C": 1.0,
+  "logistic_regression": {
+    "macro_f1": 0.6084885390792879,
+    "accuracy": 0.6092478020188864,
+    "confusion_matrix": [
+      [
+        2760,
+        987,
+        225
+      ],
+      [
+        1812,
+        3229,
+        896
+      ],
+      [
+        264,
+        616,
+        1495
+      ]
+    ],
+    "class_metrics": {
+      "negative": {
+        "precision": 0.5707196029776674,
+        "recall": 0.6948640483383686,
+        "f1-score": 0.6267029972752044,
+        "support": 3972.0
+      },
+      "neutral": {
+        "precision": 0.6682533112582781,
+        "recall": 0.5438773791477177,
+        "f1-score": 0.5996842789488346,
+        "support": 5937.0
+      },
+      "positive": {
+        "precision": 0.5714831804281345,
+        "recall": 0.6294736842105263,
+        "f1-score": 0.5990783410138248,
+        "support": 2375.0
+      }
+    },
+    "macro_recall": 0.6227383705655375
+  },
+  "majority_baseline": {
+    "macro_f1": 0.217221886833873,
+    "accuracy": 0.4833116248778899,
+    "confusion_matrix": [
+      [
+        0,
+        3972,
+        0
+      ],
+      [
+        0,
+        5937,
+        0
+      ],
+      [
+        0,
+        2375,
+        0
+      ]
+    ],
+    "class_metrics": {
+      "negative": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 3972.0
+      },
+      "neutral": {
+        "precision": 0.4833116248778899,
+        "recall": 1.0,
+        "f1-score": 0.651665660501619,
+        "support": 5937.0
+      },
+      "positive": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 2375.0
+      }
+    },
+    "macro_recall": 0.3333333333333333
+  }
+}
