@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shortpost-sentiment"
+version = "0.1.0"
+description = "Reproducible sentiment baselines for labelled short posts"
+requires-python = ">=3.10"
+dependencies = ["scikit-learn==1.7.2", "joblib==1.5.2"]
+
+[project.scripts]
+post-sentiment = "post_sentiment.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["post_sentiment*"]
