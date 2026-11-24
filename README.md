@@ -1,1 +1,24 @@
-# TwitterSentimentAnalysis
+# Short-post sentiment analysis
+
+A reproducible Python experiment for classifying short posts as negative, neutral or positive. It compares a TF-IDF logistic regression model against a majority-class baseline on the same held-out split.
+
+## Run it locally
+
+Requires Python 3.10 or later.
+
+```sh
+python -m pip install .
+post-sentiment train examples/labelled_posts.csv --output runs/demo
+post-sentiment predict runs/demo/model.joblib "The support team was helpful"
+python -m unittest discover -s tests -v
+```
+
+The demo uses 30 hand-written synthetic posts. It exercises training, evaluation and model reload. Eight held-out examples are too few to estimate real-world performance.
+
+## Use another dataset
+
+Supply a UTF-8 CSV with `text,label` columns and at least five distinct examples per class. The pipeline masks links and mentions, collapses exact normalised duplicates and rejects conflicts. It makes a seeded stratified split before fitting word and character TF-IDF. The output records macro-F1, accuracy, confusion matrices, class supports and the input file's SHA-256. Use a fresh output directory for each run.
+
+Collect posts under terms that allow your intended use. For a realistic benchmark, split by author, conversation or time where that metadata exists. Exact deduplication does not catch paraphrases, repeated topics or shared authors. Sarcasm, domain shifts and annotator disagreement can reduce accuracy. Prediction scores are model outputs and have not been calibrated. Load only model artefacts you created locally because joblib loads executable Python objects.
+
+Khush Bhavin Maru · Adelaide University MAAIM portfolio. Codex assisted with implementation and documentation.
