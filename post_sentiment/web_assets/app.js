@@ -118,6 +118,7 @@ async function loadSession() {
       $('dataset-link').hidden = false;
       showMetrics([
         ['Test macro recall', result.logistic_regression.macro_recall],
+        ...(result.linear_svm ? [['Linear SVM macro recall', result.linear_svm.macro_recall]] : []),
         ['Majority macro recall', result.majority_baseline.macro_recall],
         ['Test macro-F1', result.logistic_regression.macro_f1],
       ]);
@@ -128,7 +129,8 @@ async function loadSession() {
         ['Test tweets', test],
         ['Features', 'Word + character TF-IDF'],
         ['Estimator', 'Logistic regression'],
-        ['Regularisation C', result.selected_C],
+        ['Logistic regression C', result.selected_C],
+        ...(result.svm_selected_C === undefined ? [] : [['Linear SVM C', result.svm_selected_C]]),
       ]);
     } else if (result) {
       $('session').textContent = 'Held-out results from the dataset used to train this local model.';

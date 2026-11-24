@@ -17,3 +17,6 @@ class WorkflowTests(unittest.TestCase):
             result = predict(load_trusted(root / "first/model.joblib"), "Great update!")
             self.assertAlmostEqual(sum(result["model_scores"].values()), 1)
             self.assertIn(result["label"], first["class_order"])
+
+            with self.assertRaisesRegex(ValueError, "training vocabulary"):
+                predict(load_trusted(root / "first/model.joblib"), "🫠")

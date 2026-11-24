@@ -42,7 +42,7 @@ def serve(port, endpoint, process, limit, state=None):
                 self.send_error(404)
                 return
             origin = self.headers.get("Origin")
-            if origin and origin not in {f"http://127.0.0.1:{port}", f"http://localhost:{port}"}:
+            if origin and origin not in {f"http://127.0.0.1:{self.server.server_port}", f"http://localhost:{self.server.server_port}"}:
                 self.send_error(403)
                 return
             try:
