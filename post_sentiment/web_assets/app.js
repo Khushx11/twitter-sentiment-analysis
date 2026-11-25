@@ -1,8 +1,36 @@
 
 const $ = id => document.getElementById(id);
 let inputVersion = 0;
+let latest;
+let pinned;
+
+function showComparison() {
+  $('comparison').hidden = !pinned;
+  $('pin').disabled = !latest || pinned === latest;
+  if (!pinned) return;
+  $('pinned-post').textContent = pinned.text;
+  $('pinned-label').textContent = 'Pinned prediction: ' + pinned.label;
+  $('pinned-label').dataset.tone = pinned.label;
+  showScores($('pinned-scores'), pinned.scores);
+  $('compare-note').textContent = latest && latest !== pinned
+    ? 'Current prediction: ' + latest.label + '. Pinned prediction: ' + pinned.label + '.'
+    : 'Analyse another post to compare it with this one.';
+}
+
+$('pin').addEventListener('click', () => {
+  pinned = latest;
+  showComparison();
+  $('unpin').focus();
+});
+$('unpin').addEventListener('click', () => {
+  pinned = undefined;
+  showComparison();
+  (latest ? $('pin') : $('post')).focus();
+});
 function updateCount() {
   inputVersion += 1;
+  latest = undefined;
+  showComparison();
   $('count').textContent = $('post').value.length + ' / 1,000';
   $('result').hidden = true;
   $('empty').hidden = false;
@@ -20,6 +48,19 @@ function label(tag, text) {
   element.textContent = text;
   return element;
 }
+function showScores(target, scores) {
+  target.replaceChildren(...Object.entries(scores).map(([name, score]) => {
+    const row = label('div', '');
+    row.className = 'score';
+    row.dataset.tone = name;
+    const bar = document.createElement('progress');
+    bar.max = 1;
+    bar.value = score;
+    bar.setAttribute('aria-label', name + ' model score');
+    row.append(label('span', name), bar, label('span', (score * 100).toFixed(1) + '%'));
+    return row;
+  }));
+}
 $('predict').addEventListener('submit', async event => {
   event.preventDefault();
   const button = event.submitter;
@@ -31,6 +72,8 @@ $('predict').addEventListener('submit', async event => {
     return;
   }
   if (button) button.disabled = true;
+  latest = undefined;
+  showComparison();
   $('status').textContent = 'Analysing…';
   $('status').classList.remove('error');
   $('result').hidden = true;
@@ -43,17 +86,12 @@ $('predict').addEventListener('submit', async event => {
     $('label').textContent = value.label;
     $('label').dataset.tone = value.label;
     $('analysed-post').textContent = $('post').value;
-    $('scores').replaceChildren(...Object.entries(value.model_scores).map(([name, score]) => {
-      const row = label('div', '');
-      row.className = 'score';
-      row.dataset.tone = name;
-      const bar = document.createElement('progress');
-      bar.max = 1;
-      bar.value = score;
-      bar.setAttribute('aria-label', name + ' model score');
-      row.append(label('span', name), bar, label('span', (score * 100).toFixed(1) + '%'));
-      return row;
-    }));
+    latest = {text: $('post').value, label: value.label, scores: value.model_scores};
+    showScores($('scores'), latest.scores);
+    const [first, second] = Object.values(latest.scores).sort((a, b) => b - a);
+    $('score-gap').textContent = 'The two highest scores are ' +
+      ((first - second) * 100).toFixed(1) + ' percentage points apart.';
+    showComparison();
     $('result').hidden = false;
     $('status').textContent = 'Predicted sentiment: ' + value.label + '.';
   } catch (error) {
