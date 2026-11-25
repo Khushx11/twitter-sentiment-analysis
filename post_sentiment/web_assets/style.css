@@ -12,3 +12,23 @@ textarea{min-height:92px;width:100%;resize:vertical;padding:9px 11px;background:
 @media(max-width:730px){.grid,.diagnostics{grid-template-columns:minmax(0,1fr)}}
 
 .metrics{grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr))}
+
+:root {color-scheme:light;--page:#eaf1f8;--surface:#fff;--raised:#edf3fa;--line:#bdcede;--ink:#192d44;--muted:#425b74;--accent:#215ca1;--blue:#215ca1}
+body {background:radial-gradient(ellipse at top right,#d3e4fa,transparent 52%),var(--page)}
+header {background:#142e4b;border-bottom:2px solid #76a1d8}
+header .brand,header nav a {color:#fff}
+.hero h1 {font:850 clamp(2rem,5vw,3.6rem)/1.02 system-ui,sans-serif;letter-spacing:-.06em}
+#inference .panel:first-child {position:relative;border-radius:20px 20px 20px 5px}
+#post {min-height:9rem;border-radius:12px;padding:16px;font-size:1.02rem;line-height:1.55;background:#f5f8fd;color:var(--ink)}
+#count {font-family:ui-monospace,monospace;color:var(--muted)}
+.output {border-top:4px solid #2364a5}
+.output .hero-label {font-family:ui-monospace,monospace}
+button.primary {background:#1d5697;color:#fff}
+#evaluation {border-top:1px solid #a6bcd2}
+:focus-visible {outline:3px solid currentColor;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.mark {background:#d5e7fa;color:#173f72}
+.tag {color:#183e69;background:#e0edfc;border-color:#96b3d2}
+.error {color:#8d2d30}
+td.heat {color:#f7fbff}
