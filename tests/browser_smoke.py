@@ -26,7 +26,7 @@ with TemporaryDirectory() as root, subprocess.Popen(
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
             page.goto(address)
-            expect(page.get_by_role("heading", name="Read the mood of a post.")).to_be_visible()
+            expect(page.get_by_role("heading", name="Twitter Sentiment Analysis")).to_be_visible()
             expect(page.get_by_role("heading", name="Confusion matrix")).to_be_visible()
             post = page.get_by_role("textbox", name="Tweet text")
             submit = page.get_by_role("button", name="Analyse tweet")
