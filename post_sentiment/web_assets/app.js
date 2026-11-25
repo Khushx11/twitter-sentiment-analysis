@@ -1,8 +1,49 @@
 
 const $ = id => document.getElementById(id);
 let inputVersion = 0;
+let latest;
+let pinned;
+
+function showComparison() {
+  $('comparison').hidden = !pinned;
+  $('pin').disabled = !latest || pinned === latest;
+  if (!pinned) return;
+  $('pinned-post').textContent = pinned.text;
+  $('pinned-label').textContent = 'Pinned prediction: ' + pinned.label;
+  $('pinned-label').dataset.tone = pinned.label;
+  showScores($('pinned-scores'), pinned.scores);
+  const comparing = latest && latest !== pinned;
+  $('compare-note').textContent = comparing
+    ? 'Current prediction: ' + latest.label + '. Pinned prediction: ' + pinned.label + '.'
+    : 'Analyse another post to compare it with this one.';
+  const change = $('score-change');
+  change.hidden = !comparing;
+  if (comparing) {
+    const [largest] = Object.keys(latest.scores)
+      .map(name => ({name, delta: (latest.scores[name] - pinned.scores[name]) * 100}))
+      .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+    const magnitude = Math.abs(largest.delta).toFixed(1);
+    change.textContent = magnitude === '0.0'
+      ? 'All three scores match to one decimal place.'
+      : largest.name[0].toUpperCase() + largest.name.slice(1) +
+        ' score ' + (largest.delta > 0 ? 'rose' : 'fell') + ' by ' + magnitude + ' percentage points.';
+  }
+}
+
+$('pin').addEventListener('click', () => {
+  pinned = latest;
+  showComparison();
+  $('unpin').focus();
+});
+$('unpin').addEventListener('click', () => {
+  pinned = undefined;
+  showComparison();
+  (latest ? $('pin') : $('post')).focus();
+});
 function updateCount() {
   inputVersion += 1;
+  latest = undefined;
+  showComparison();
   $('count').textContent = $('post').value.length + ' / 1,000';
   $('result').hidden = true;
   $('empty').hidden = false;
@@ -10,8 +51,8 @@ function updateCount() {
   $('status').classList.remove('error');
 }
 $('post').addEventListener('input', updateCount);
-document.querySelectorAll('[data-text]').forEach(button => button.addEventListener('click', () => {
-  $('post').value = button.dataset.text;
+document.querySelectorAll('[data-example]').forEach(button => button.addEventListener('click', () => {
+  $('post').value = button.closest("article").querySelector("p").textContent;
   updateCount();
   $('post').focus();
 }));
@@ -20,11 +61,32 @@ function label(tag, text) {
   element.textContent = text;
   return element;
 }
+function showScores(target, scores) {
+  target.replaceChildren(...Object.entries(scores).map(([name, score]) => {
+    const row = label('div', '');
+    row.className = 'score';
+    row.dataset.tone = name;
+    const bar = document.createElement('progress');
+    bar.max = 1;
+    bar.value = score;
+    bar.setAttribute('aria-label', name + ' model score');
+    row.append(label('span', name), bar, label('span', (score * 100).toFixed(1) + '%'));
+    return row;
+  }));
+}
 $('predict').addEventListener('submit', async event => {
   event.preventDefault();
   const button = event.submitter;
   const version = inputVersion;
+  if (!$('post').value.trim()) {
+    $('status').textContent = 'Enter a post to analyse.';
+    $('status').classList.add('error');
+    $('post').focus();
+    return;
+  }
   if (button) button.disabled = true;
+  latest = undefined;
+  showComparison();
   $('status').textContent = 'Analysing…';
   $('status').classList.remove('error');
   $('result').hidden = true;
@@ -35,18 +97,16 @@ $('predict').addEventListener('submit', async event => {
     if (version !== inputVersion) return;
     if (!response.ok) throw new Error(value.error);
     $('label').textContent = value.label;
-    $('scores').replaceChildren(...Object.entries(value.model_scores).map(([name, score]) => {
-      const row = label('div', '');
-      row.className = 'score';
-      const bar = document.createElement('progress');
-      bar.max = 1;
-      bar.value = score;
-      bar.setAttribute('aria-label', name + ' model score');
-      row.append(label('span', name), bar, label('span', (score * 100).toFixed(1) + '%'));
-      return row;
-    }));
+    $('label').dataset.tone = value.label;
+    $('analysed-post').textContent = $('post').value;
+    latest = {text: $('post').value, label: value.label, scores: value.model_scores};
+    showScores($('scores'), latest.scores);
+    const [first, second] = Object.values(latest.scores).sort((a, b) => b - a);
+    $('score-gap').textContent = 'The two highest scores are ' +
+      ((first - second) * 100).toFixed(1) + ' percentage points apart.';
+    showComparison();
     $('result').hidden = false;
-    $('status').textContent = 'Analysis complete.';
+    $('status').textContent = 'Predicted sentiment: ' + value.label + '.';
   } catch (error) {
     if (version !== inputVersion) return;
     $('status').textContent = error.message;
@@ -155,6 +215,9 @@ async function loadSession() {
     } else {
       $('session').textContent = 'This local model has no embedded evaluation record.';
     }
-  } catch (error) { $('session').textContent = error.message; }
+  } catch (error) {
+    $('mode').textContent = 'Model status unavailable';
+    $('session').textContent = error.message;
+  }
 }
 loadSession();

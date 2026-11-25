@@ -9,6 +9,8 @@ FILES = {
     "/": ("index.html", "text/html"),
     "/style.css": ("style.css", "text/css"),
     "/app.js": ("app.js", "text/javascript"),
+    "/twitter-bird.svg": ("twitter-bird.svg", "image/svg+xml"),
+    "/conversation.webp": ("conversation.webp", "image/webp"),
     "/sample.csv": ("sample.csv", "text/csv"),
 }
 
@@ -16,7 +18,7 @@ def serve(port, endpoint, process, limit, state=None):
     class Handler(BaseHTTPRequestHandler):
         def send(self, status, kind, content):
             self.send_response(status)
-            self.send_header("Content-Type", kind + "; charset=utf-8")
+            self.send_header("Content-Type", kind if kind.startswith("image/") else kind + "; charset=utf-8")
             self.send_header("Content-Length", str(len(content)))
             self.send_header("Cache-Control", "no-store")
             self.send_header("X-Content-Type-Options", "nosniff")

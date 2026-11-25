@@ -21,7 +21,7 @@ python -m post_sentiment.benchmark data/tweeteval/datasets/sentiment --output ru
 python -m post_sentiment.web --model runs/tweeteval/model.joblib
 ```
 
-Open http://127.0.0.1:8001. The browser shows model scores, the attached evaluation and per-class errors. It runs locally. Starting without `--model` uses the synthetic smoke test.
+Open http://127.0.0.1:8001. Paste an English tweet or load a post from the fictional release thread. Select **Analyse tweet** to see the predicted label and all three model scores. Pin a result and analyse a second post to compare the scores. Open **Benchmark** to inspect the attached evaluation and per-class errors. The app processes text locally. Starting without `--model` uses the synthetic smoke test.
 
 The linear model achieved **62.23% macro recall**, **60.85% macro-F1** and **60.96% accuracy** on 12,284 official test posts. The same-split linear SVM achieved **60.94% macro recall** and the majority baseline achieved **33.33%**. Both linear models use identical features and tune regularisation separately on validation data. The live dashboard runs logistic regression. The benchmark verifies all six source files against the pinned SHA-256 hashes before fitting. We fit word and character features on the official training set, select regularisation on the validation split and score the locked model on the test split. Macro recall is the benchmark’s primary sentiment metric. The audit found zero exact normalised training-text matches in validation or test. This does not rule out paraphrases, similar topics, or temporal overlap. [Measured results and input hashes](docs/tweeteval-results.json)
 
@@ -49,3 +49,5 @@ Supply a UTF-8 CSV with `text,label` columns and at least five distinct examples
 Collect posts under terms that allow your intended use. For a realistic benchmark, split by author, conversation or time where that metadata exists. Exact deduplication does not catch paraphrases, repeated topics or shared authors. Sarcasm, domain shifts and annotator disagreement can reduce accuracy. Prediction scores are model outputs and have not been calibrated. Load only model artefacts you created locally because joblib loads executable Python objects.
 
 Khush Bhavin Maru · Adelaide University MAAIM portfolio. Codex assisted with implementation and documentation.
+
+The background uses the historical [Twitter bird mark](https://blog.x.com/official/en_us/a/2012/taking-flight-twitterbird.html), adapted from [Twitter’s open-source website](https://github.com/twitter/opensource-website/blob/2887311216d99cd0e38b16e564bcdbea3797eb63/static/assets/twitter-logo.svg). Twitter branding belongs to its owner.
