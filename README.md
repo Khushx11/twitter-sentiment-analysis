@@ -11,6 +11,12 @@ Logistic regression leads the linear SVM by 1.29 percentage points on 12,284 off
 
 ## Interview demo and measured benchmark
 
+Pin the first TweetEval prediction and compare it with a sarcastic reply. The example thread is fictional.
+
+[Watch the 15-second captioned walkthrough](https://raw.githubusercontent.com/Khushx11/twitter-sentiment-analysis/main/docs/demo/walkthrough.mp4)
+
+[![TweetEval model comparing a literal compliment and a sarcastic complaint beside the example thread](docs/demo/preview.png)](https://raw.githubusercontent.com/Khushx11/twitter-sentiment-analysis/main/docs/demo/walkthrough.mp4)
+
 Install the package, get the publisher’s fixed splits, then train and launch the browser interface.
 
 ```sh
