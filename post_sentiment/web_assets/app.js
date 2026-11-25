@@ -10,8 +10,8 @@ function updateCount() {
   $('status').classList.remove('error');
 }
 $('post').addEventListener('input', updateCount);
-document.querySelectorAll('[data-text]').forEach(button => button.addEventListener('click', () => {
-  $('post').value = button.dataset.text;
+document.querySelectorAll('[data-example]').forEach(button => button.addEventListener('click', () => {
+  $('post').value = button.closest("article").querySelector("p").textContent;
   updateCount();
   $('post').focus();
 }));
@@ -24,6 +24,12 @@ $('predict').addEventListener('submit', async event => {
   event.preventDefault();
   const button = event.submitter;
   const version = inputVersion;
+  if (!$('post').value.trim()) {
+    $('status').textContent = 'Enter a post to analyse.';
+    $('status').classList.add('error');
+    $('post').focus();
+    return;
+  }
   if (button) button.disabled = true;
   $('status').textContent = 'Analysing…';
   $('status').classList.remove('error');
@@ -35,9 +41,12 @@ $('predict').addEventListener('submit', async event => {
     if (version !== inputVersion) return;
     if (!response.ok) throw new Error(value.error);
     $('label').textContent = value.label;
+    $('label').dataset.tone = value.label;
+    $('analysed-post').textContent = $('post').value;
     $('scores').replaceChildren(...Object.entries(value.model_scores).map(([name, score]) => {
       const row = label('div', '');
       row.className = 'score';
+      row.dataset.tone = name;
       const bar = document.createElement('progress');
       bar.max = 1;
       bar.value = score;
@@ -46,7 +55,7 @@ $('predict').addEventListener('submit', async event => {
       return row;
     }));
     $('result').hidden = false;
-    $('status').textContent = 'Analysis complete.';
+    $('status').textContent = 'Predicted sentiment: ' + value.label + '.';
   } catch (error) {
     if (version !== inputVersion) return;
     $('status').textContent = error.message;
@@ -155,6 +164,9 @@ async function loadSession() {
     } else {
       $('session').textContent = 'This local model has no embedded evaluation record.';
     }
-  } catch (error) { $('session').textContent = error.message; }
+  } catch (error) {
+    $('mode').textContent = 'Model status unavailable';
+    $('session').textContent = error.message;
+  }
 }
 loadSession();
