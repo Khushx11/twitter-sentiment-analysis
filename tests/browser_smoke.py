@@ -30,7 +30,7 @@ with TemporaryDirectory() as root, subprocess.Popen(
             expect(page.get_by_role("heading", name="Confusion matrix")).to_be_visible()
             post = page.get_by_role("textbox", name="Tweet text")
             submit = page.get_by_role("button", name="Analyse tweet")
-            expect(page.get_by_text("Fictional posts.", exact=False)).to_be_visible()
+            expect(page.get_by_text("A fictional release thread.", exact=False)).to_be_visible()
             page.get_by_role("button", name="Use post").first.click()
             expect(post).to_have_value("The rollout went smoothly and the support team was excellent.")
             expect(post).to_be_focused()
@@ -39,10 +39,10 @@ with TemporaryDirectory() as root, subprocess.Popen(
             expect(page.locator("#scores progress")).to_have_count(3)
             expect(page.locator("#analysed-post")).to_have_text("Great service this morning")
             expect(page.get_by_role("status")).to_contain_text("Predicted sentiment:")
-            assert page.locator(".hero-art").evaluate("(img) => img.complete && img.naturalWidth > 0")
+            assert page.locator(".context img").evaluate("(img) => img.complete && img.naturalWidth > 0")
             previews = os.environ.get("SENTIMENT_PREVIEWS")
             if previews:
-                page.screenshot(path=Path(previews) / "sentiment-pulse-desktop.png", full_page=True)
+                page.screenshot(path=Path(previews) / "twitter-sentiment-thread-desktop.png", full_page=True)
             post.fill("🫠")
             expect(page.locator("#result")).to_be_hidden()
             submit.click()
@@ -62,6 +62,6 @@ with TemporaryDirectory() as root, subprocess.Popen(
             if previews:
                 mobile.locator(":focus").evaluate("(element) => element.blur()")
                 mobile.evaluate("window.scrollTo(0, 0)")
-                mobile.screenshot(path=Path(previews) / "sentiment-pulse-mobile.png", full_page=True)
+                mobile.screenshot(path=Path(previews) / "twitter-sentiment-thread-mobile.png", full_page=True)
     finally:
         server.terminate()

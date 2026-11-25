@@ -3,18 +3,13 @@
 <title>Twitter Sentiment Analysis</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
 </head><body>
 <a class="skip" href="#post">Skip to composer</a>
-<header><div class="nav"><a href="/" class="brand"><span class="mark" aria-hidden="true">↯</span> Twitter Sentiment Analysis</a><nav aria-label="Sections"><a href="#inference">Composer</a><a href="#examples">Example feed</a><a href="#evaluation">Benchmark</a></nav></div></header>
-<main>
-<section class="hero" aria-labelledby="title">
-  <div class="hero-copy">
-    <p class="platform"><span aria-hidden="true">𝕏</span> English posts on Twitter / X</p>
-    <h1 id="title">Twitter Sentiment<br>Analysis</h1>
-    <p>Paste an English tweet or reply. See how the model scores it across positive, neutral and negative sentiment.</p>
-    <a class="primary" href="#post">Try a post <span aria-hidden="true">↓</span></a>
-  </div>
-  <img class="hero-art" src="/conversation.webp" alt="" width="1200" height="800" fetchpriority="high">
-</section>
-<div class="workspace" id="inference">
+<div class="timeline">
+<header class="rail">
+  <a class="brand" href="#inference"><span class="mark" aria-hidden="true">𝕏</span><span>Twitter Sentiment Analysis</span></a>
+  <nav aria-label="Sections"><a href="#post">Compose</a><a href="#examples">Example feed</a><a href="#evaluation">Benchmark</a></nav>
+</header>
+<main id="inference">
+<h1 id="title">Twitter Sentiment Analysis</h1>
     <section class="panel composer" aria-labelledby="compose-title">
       <div class="section-head"><h2 id="compose-title">Compose a post</h2><span class="tag" id="mode">Loading model…</span></div>
       <form id="predict">
@@ -38,25 +33,25 @@
     </div>
   </section>
     <section class="panel feed" id="examples" aria-labelledby="feed-title">
-      <div class="feed-head"><h2 id="feed-title">Example feed</h2><p class="muted">Fictional posts. Choose one to load it into the composer.</p></div>
+      <div class="feed-head"><h2 id="feed-title">Example feed</h2><p class="muted">A fictional release thread. Choose any post to analyse it on its own.</p></div>
+      <div class="conversation">
       <article class="post positive">
         <span class="avatar" aria-hidden="true">+</span><div><div class="byline"><strong>Release notes</strong><span>@sample_release</span></div>
         <p>The rollout went smoothly and the support team was excellent.</p>
         <footer><span class="tone">Positive example</span><button type="button" data-example>Use post <span aria-hidden="true">↗</span></button></footer></div>
       </article>
-      <article class="post neutral">
+      <article class="post reply neutral">
         <span class="avatar" aria-hidden="true">•</span><div><div class="byline"><strong>Schedule desk</strong><span>@sample_schedule</span></div>
         <p>The release is scheduled for 9 am tomorrow.</p>
         <footer><span class="tone">Neutral example</span><button type="button" data-example>Use post <span aria-hidden="true">↗</span></button></footer></div>
       </article>
-      <article class="post negative">
+      <article class="post reply negative">
         <span class="avatar" aria-hidden="true">−</span><div><div class="byline"><strong>App feedback</strong><span>@sample_feedback</span></div>
         <p>The new update keeps crashing and support has not replied.</p>
         <footer><span class="tone">Negative example</span><button type="button" data-example>Use post <span aria-hidden="true">↗</span></button></footer></div>
       </article>
+      </div>
     </section>
-
-</div>
 <section id="evaluation" class="evaluation">
 <div class="section-head"><div><p class="eyebrow">BENCHMARK</p><h2>Model evaluation</h2></div><a id="dataset-link" class="button" hidden>View TweetEval ↗</a></div>
 <p id="session" class="muted"></p><div class="metrics" id="metrics" hidden></div>
@@ -64,4 +59,15 @@
 <div><h3>Confusion matrix</h3><p class="foot">Rows are actual classes. Shading shows the share within each row.</p><div class="scroll" tabindex="0" role="region" aria-label="Confusion matrix table"><table id="matrix"></table></div></div>
 <div class="protocol"><h3>Evaluation protocol</h3><dl id="protocol"></dl></div>
 </div></section>
-</main></body></html>
+</main>
+<aside class="context" aria-label="About the analysis">
+  <img src="/conversation.webp" alt="" width="1200" height="800" loading="lazy">
+  <h2>Three sentiment labels</h2>
+  <dl>
+    <div class="positive"><dt>Positive</dt><dd>Praise or approval</dd></div>
+    <div class="neutral"><dt>Neutral</dt><dd>Information or a factual update</dd></div>
+    <div class="negative"><dt>Negative</dt><dd>Criticism or dissatisfaction</dd></div>
+  </dl>
+  <a href="#evaluation">How the model was evaluated ↓</a>
+</aside></div>
+</body></html>
