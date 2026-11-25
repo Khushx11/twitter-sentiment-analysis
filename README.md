@@ -3,20 +3,11 @@
 A reproducible Python experiment for classifying English tweets as negative, neutral or positive. It compares a TF-IDF logistic regression model against a linear SVM and a majority-class baseline on the same official test split.
 
 
-## Sentiment workflow
+## Compare the three sentiment classifiers
 
-```mermaid
-flowchart LR
-    A["English post"]
-    B["Word and character TF–IDF"]
-    C["Linear classifier"]
-    D["Sentiment label"]
-    A --> B --> C --> D
-```
+![TweetEval test macro recall by classifier, on a common zero-to-100-percent scale](docs/readme-benchmark.svg)
 
-![Official TweetEval test macro recall](docs/readme-benchmark.svg)
-
-The same official test split contains 12,284 posts.
+Logistic regression leads the linear SVM by 1.29 percentage points on 12,284 official test posts. The two linear models use the same word and character features. The browser demo serves logistic regression.
 
 ## Interview demo and measured benchmark
 
