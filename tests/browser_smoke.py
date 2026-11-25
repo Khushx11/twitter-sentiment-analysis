@@ -27,6 +27,8 @@ with TemporaryDirectory() as root, subprocess.Popen(
             page.on("pageerror", lambda error: errors.append(str(error)))
             page.goto(address)
             expect(page.get_by_role("heading", name="Twitter Sentiment Analysis")).to_be_visible()
+            expect(page.locator(".bird-watermark")).to_have_js_property("complete", True)
+            assert page.locator(".bird-watermark").evaluate("(image) => image.naturalWidth > 0")
             expect(page.get_by_role("heading", name="Confusion matrix")).to_be_visible()
             post = page.get_by_role("textbox", name="Tweet text")
             submit = page.get_by_role("button", name="Analyse tweet")
@@ -46,9 +48,10 @@ with TemporaryDirectory() as root, subprocess.Popen(
             submit.click()
             expect(page.locator("#compare-note")).to_contain_text("Current prediction:")
             expect(page.locator("#score-gap")).to_contain_text("percentage points apart")
+            expect(page.locator("#score-change")).to_contain_text("points")
             previews = os.environ.get("SENTIMENT_PREVIEWS")
             if previews:
-                page.screenshot(path=Path(previews) / "twitter-sentiment-comparison-desktop.png", full_page=True)
+                page.screenshot(path=Path(previews) / "twitter-sentiment-bird-desktop.png", full_page=True)
             post.fill("🫠")
             expect(page.locator("#result")).to_be_hidden()
             submit.click()
@@ -71,6 +74,6 @@ with TemporaryDirectory() as root, subprocess.Popen(
             if previews:
                 mobile.locator(":focus").evaluate("(element) => element.blur()")
                 mobile.evaluate("window.scrollTo(0, 0)")
-                mobile.screenshot(path=Path(previews) / "twitter-sentiment-comparison-mobile.png", full_page=True)
+                mobile.screenshot(path=Path(previews) / "twitter-sentiment-bird-mobile.png", full_page=True)
     finally:
         server.terminate()

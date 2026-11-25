@@ -11,6 +11,7 @@
 </header>
 <main class="shell" id="inference">
 <div class="introduction">
+  <img class="bird-watermark" src="/twitter-bird.svg" alt="" width="248" height="204">
   <div><h1>Twitter Sentiment Analysis</h1><p>Compare how the model reads an English post, a reply, or a change in wording.</p></div>
   <span class="tag" id="mode">Loading model…</span>
 </div>
@@ -47,12 +48,13 @@
       <p id="pinned-label"></p>
       <div id="pinned-scores"></div>
       <p class="foot" id="compare-note" role="status"></p>
+      <p id="score-change" class="score-change" hidden></p>
     </section>
     </div>
   </section>
   </section>
     <section class="panel feed" id="examples" aria-labelledby="feed-title">
-      <div class="feed-head"><h2 id="feed-title">Example feed</h2><p class="muted">A fictional release thread. Try the praise and the sarcastic reply, then compare their scores.</p></div>
+      <div class="feed-head"><h2 id="feed-title">Example thread</h2><p class="muted">A fictional release thread. Try the praise and the sarcastic reply, then compare their scores.</p></div>
       <div class="conversation">
       <article class="post positive">
         <span class="avatar" aria-hidden="true">+</span><div><div class="byline"><strong>Release notes</strong><span>@sample_release</span></div>

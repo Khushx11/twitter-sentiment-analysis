@@ -12,9 +12,22 @@ function showComparison() {
   $('pinned-label').textContent = 'Pinned prediction: ' + pinned.label;
   $('pinned-label').dataset.tone = pinned.label;
   showScores($('pinned-scores'), pinned.scores);
-  $('compare-note').textContent = latest && latest !== pinned
+  const comparing = latest && latest !== pinned;
+  $('compare-note').textContent = comparing
     ? 'Current prediction: ' + latest.label + '. Pinned prediction: ' + pinned.label + '.'
     : 'Analyse another post to compare it with this one.';
+  const change = $('score-change');
+  change.hidden = !comparing;
+  if (comparing) {
+    const [largest] = Object.keys(latest.scores)
+      .map(name => ({name, delta: (latest.scores[name] - pinned.scores[name]) * 100}))
+      .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+    const magnitude = Math.abs(largest.delta).toFixed(1);
+    change.textContent = magnitude === '0.0'
+      ? 'All three scores match to one decimal place.'
+      : largest.name[0].toUpperCase() + largest.name.slice(1) +
+        ' score ' + (largest.delta > 0 ? 'rose' : 'fell') + ' by ' + magnitude + ' percentage points.';
+  }
 }
 
 $('pin').addEventListener('click', () => {

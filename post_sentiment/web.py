@@ -9,6 +9,7 @@ FILES = {
     "/": ("index.html", "text/html"),
     "/style.css": ("style.css", "text/css"),
     "/app.js": ("app.js", "text/javascript"),
+    "/twitter-bird.svg": ("twitter-bird.svg", "image/svg+xml"),
     "/conversation.webp": ("conversation.webp", "image/webp"),
     "/sample.csv": ("sample.csv", "text/csv"),
 }

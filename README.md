@@ -49,3 +49,5 @@ Supply a UTF-8 CSV with `text,label` columns and at least five distinct examples
 Collect posts under terms that allow your intended use. For a realistic benchmark, split by author, conversation or time where that metadata exists. Exact deduplication does not catch paraphrases, repeated topics or shared authors. Sarcasm, domain shifts and annotator disagreement can reduce accuracy. Prediction scores are model outputs and have not been calibrated. Load only model artefacts you created locally because joblib loads executable Python objects.
 
 Khush Bhavin Maru · Adelaide University MAAIM portfolio. Codex assisted with implementation and documentation.
+
+The background uses the historical [Twitter bird mark](https://blog.x.com/official/en_us/a/2012/taking-flight-twitterbird.html), adapted from [Twitter’s open-source website](https://github.com/twitter/opensource-website/blob/2887311216d99cd0e38b16e564bcdbea3797eb63/static/assets/twitter-logo.svg). Twitter branding belongs to its owner.
